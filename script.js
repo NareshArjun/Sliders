@@ -1,9 +1,11 @@
 "use strict";
 
 (function () {
+  var sliderWrap = document.querySelectorAll(".sliders_wrap");
   var sliders = document.querySelectorAll(".sliders");
   var currentSlide = 0;
   var slideLength = sliders.length;
+  var isClicked = false;
 
   var dotsWrap = document.querySelector(".dots_wrapper");
   var sliderUpButton = document.querySelector(".slider_up_button");
@@ -12,6 +14,7 @@
   function slideMovement(slidePosition) {
     sliders.forEach((slider, index) => {
       slider.style.transform = `translateY(${100 * (index - slidePosition)}%)`;
+      slider.style.transition = "transform 1s";
     });
   }
 
@@ -53,6 +56,8 @@
       .classList.add("dots_active");
   }
 
+  function slideDrag(slidePosition) {}
+
   //Assigning initial positions
   slideMovement(currentSlide);
   createDots();
@@ -66,6 +71,7 @@
   for (var i = 0; i < slideLength; i++) {
     (function (i) {
       sliders[i].addEventListener("wheel", function (e) {
+        console.log(e, e.CAPTURING_PHASE);
         if (e.deltaY > 0) {
           slideForward();
         } else if (e.deltaY < 0) {
@@ -83,6 +89,94 @@
       activeDot(slideIndex);
     }
   });
+
+  //Movement using Click and Drag
+  for (var i = 0; i < slideLength; i++) {
+    (function (i) {
+      var initialClickedPoint = 0,
+        clickReleasePoint = 0,
+        distanceBetweenClicks = 0;
+      sliders[i].addEventListener("mousedown", function (e) {
+        initialClickedPoint = e.clientY;
+        isClicked = true;
+        sliders[i].style.cursor = "grabbing";
+        console.log("mousedown");
+      });
+      sliders[i].addEventListener("mouseup", function (e) {
+        sliders[i].style.cursor = "grab";
+        //clickReleasePoint = e.clientY;
+        console.log("mouseup");
+        console.log(initialClickedPoint, e.clientY);
+        if (initialClickedPoint > e.clientY) {
+          slideForward();
+        } else if (initialClickedPoint < e.clientY) {
+          slideBackward();
+        }
+      });
+      window.addEventListener("mouseup", function () {
+        isClicked = false;
+        console.log("window.mouseup");
+      });
+      sliders[i].addEventListener("mousemove", function (e) {
+        if (!isClicked) return;
+        console.log("mousemove", sliders[i].getBoundingClientRect(), e.clientY);
+        e.preventDefault();
+        clickReleasePoint = e.clientY;
+        distanceBetweenClicks = clickReleasePoint - initialClickedPoint;
+        //sliders[i].style.transform = `translateY(${100 * (index - slidePosition)}%)`;
+        //sliders[i].style.transform = `translateY(${clickReleasePoint}px)`;
+        console.log(initialClickedPoint, e, e.clientY);
+        if (initialClickedPoint > clickReleasePoint) {
+          //slideForward();
+
+          sliders[i].style.transform = `translateY(${
+            (distanceBetweenClicks * 100) / e.view.innerHeight
+          }%)`;
+          sliders[i + 1].style.transform = `translateY(${
+            (distanceBetweenClicks * 100) / e.view.innerHeight + 100
+          }%)`;
+          sliders[i - 1].style.transform = `translateY(${-100}%)`;
+          console.log(
+            "i",
+            (distanceBetweenClicks * 100) / e.view.innerHeight,
+            "i+1",
+            (distanceBetweenClicks * 100) / e.view.innerHeight + 100
+          );
+          console.log(
+            "total",
+            ((distanceBetweenClicks * 100) / e.view.innerHeight) * 2 + 100
+          );
+          /*sliders[i].style.transition = "transform 1s";
+          sliders[i + 1].style.transition = "transform 1s";
+          sliders[i - 1].style.transition = "transform 2s";*/
+        } else if (initialClickedPoint < clickReleasePoint) {
+          //slideBackward();
+          sliders[i].style.transform = `translateY(${
+            (distanceBetweenClicks * 100) / e.view.innerHeight
+          }%)`;
+          sliders[i - 1].style.transform = `translateY(${
+            (distanceBetweenClicks * 100) / e.view.innerHeight - 100
+          }%)`;
+
+          sliders[i + 1].style.transform = `translateY(${100}%)`;
+          console.log(
+            "i",
+            (distanceBetweenClicks * 100) / e.view.innerHeight,
+            "i-1",
+            (distanceBetweenClicks * 100) / e.view.innerHeight - 100
+          );
+          console.log(
+            "total",
+            ((distanceBetweenClicks * 100) / e.view.innerHeight) * 2 - 100
+          );
+          /*sliders[i].style.transition = "transform 1s";
+          sliders[i - 1].style.transition = "transform 1s";
+          sliders[i + 1].style.transition = "transform 2s";*/
+        }
+      });
+      //sliders[i].addEventListener("mouseup", function (e) {});
+    })(i);
+  }
 
   /*for (var i = 0; i < slideLength; i++) {
     window.addEventListener("scroll", function (e) {
