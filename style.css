@@ -30,6 +30,7 @@ body {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  cursor: auto;
 }
 .sliders {
   width: 100%;
@@ -60,6 +61,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
+  cursor: pointer;
 }
 .dots {
   display: block;
