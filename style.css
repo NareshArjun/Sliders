@@ -30,6 +30,7 @@ body {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  cursor: auto;
 }
 .sliders {
   width: 100%;
@@ -40,7 +41,7 @@ body {
   position: absolute;
 }
 .movement_button {
-  position: fixed;
+  position: absolute;
   right: 25px;
   background: 0;
   border: 0;
@@ -55,11 +56,12 @@ body {
   bottom: 0;
 }
 .dots_wrapper {
-  position: fixed;
+  position: absolute;
   right: 42.5px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
+  cursor: pointer;
 }
 .dots {
   display: block;
