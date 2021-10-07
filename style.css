@@ -35,6 +35,7 @@ body {
 .section1 {
   padding: 100px 0;
   height: 100vh;
+  background-color: lightgoldenrodyellow;
 }
 .sliders_wrap {
   height: 100%;
@@ -67,7 +68,7 @@ body {
 }
 .dots_wrapper {
   position: absolute;
-  right: 42.5px;
+  right: 25px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
