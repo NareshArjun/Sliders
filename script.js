@@ -1,8 +1,7 @@
 "use strict";
 
-const SliderContainer = function (sliderContainer, currentSlide) {
+const SliderContainer = function (sliderContainer) {
   this.sliderContainer = sliderContainer;
-  this.currentSlide = currentSlide;
 
   this.sliders = this.sliderContainer.querySelectorAll(".sliders");
   this.sliderUpButton = this.sliderContainer.querySelector(".slider_up_button");
@@ -11,6 +10,7 @@ const SliderContainer = function (sliderContainer, currentSlide) {
   );
   this.dotsWrap = this.sliderContainer.querySelector(".dots_wrapper");
 
+  this.currentSlide = 0;
   this.isClicked = false;
   this.isMouseLeft = false;
   this.initialClickedPoint = 0;
